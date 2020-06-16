@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!--Google Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&family=Rubik&display=swap" rel="stylesheet">
+   <!--FontAwesome-->
+   <script src="https://kit.fontawesome.com/6e22bf0b01.js" crossorigin="anonymous"></script>
+    {% load static %}
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <!--JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <!--Bootstrap!-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    
+    <title>PP Pizza</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        {% if Category %}
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Welcome <span>{{user.username}}</span></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}"><span class="sr-only">(current)</span><i class="fas fa-cart-arrow-down"> ${{Total|floatformat:2}}</i>
+                    </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="" alt="">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for check_cat in Checkout_category %}
+                        <p class="name">{{check_cat|cut:"("|cut:")"|cut:","|cut:"'"}}</p>
+                        {% for row in Checkout %}
+                        {% if row.category == check_cat|cut:"("|cut:")"|cut:","|cut:"'"  %}
+                        <p class='pr-3'>{{row}}&nbsp;<a href="{% url 'delete' row.category row.name row.price %}"><img class='plus rounded' src="{% static 'img/menos.png' %}"></a></p>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Total = ${{Total|floatformat:2}}</a>
+                        <a id='place_order'  href="{% url 'user_orders' Order_number %}"><div class='place bg-info w-20 rounded text-center text-white '><h4>Place order</h4></div></a>
+                    </div>
+                    </li>
+
+
+                    <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span>
+                        <i class="fas fa-home"></i>
+                    </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Menu
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for category in Category %} 
+                        <a class="dropdown-item" href="{% url 'menu' category%}">{{category}}</a>
+                        {% endfor %} 
+                    </div>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_orders' user Order_number %}">Orders manager</a>
+                    </li>
+                    {% endif %}
+                    {% if not user.is_superuser %}
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_orders' Order_number %}">My Orders</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+                </div>
+            </nav>
+        {% endif %}
+
+
+            {% if messages %}
+            {% for message in messages %}
+                <div class="text-center alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+    </header>
+
+    <div>
+        {% block main%}
+        {% endblock %}
+    </div>
+
+
+
+    <section class= sec>
+        <footer class="footer text-center">
+            <a href="https://linkedin.com/in/angelina-rizzuti"><i class="icon fab fa-linkedin fa-2x"></i></a>
+            <p>iAngy &copy; 2020 - All rights reserved.</p>
+        </footer>
+    </section>
+    
+</body>
+
+
+</html>
+
+
+
+
+      
+        
+
+
