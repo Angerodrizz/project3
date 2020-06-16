@@ -17,4 +17,4 @@ Personal touch: allowing site administrator to mark orders as complete and allow
 The requirements for the project 3 are outlined here: https://docs.cs50.net/web/2020/x/projects/3/project3.html
 
 # Screenshot
-![Screenshot](static/img/page.png)
+![Screenshot](orders/static/img/page.png)
